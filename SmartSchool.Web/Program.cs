@@ -1,4 +1,5 @@
 using SmartSchool.Web.Components;
+using SmartSchool.Web.Extensions.FrameworkExtensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +8,8 @@ builder.AddServiceDefaults();
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.ConfigureIdentity();
 
 var app = builder.Build();
 
