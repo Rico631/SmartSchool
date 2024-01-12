@@ -21,12 +21,4 @@
     <ProjectReference Include="..\SmartSchool.ServiceDefaults\SmartSchool.ServiceDefaults.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <EditorConfigFiles Remove="E:\Projects\SmartSchool\SmartSchool.Web\.editorconfig" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="E:\Projects\SmartSchool\SmartSchool.Web\.editorconfig" />
-  </ItemGroup>
-
 </Project>

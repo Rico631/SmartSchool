@@ -11,6 +11,8 @@ builder.Services.AddRazorComponents()
 
 builder.ConfigureIdentity();
 
+builder.Services.ConfigureAuthentication();
+
 var app = builder.Build();
 
 app.MapDefaultEndpoints();

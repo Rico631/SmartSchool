@@ -19,6 +19,12 @@ public static class IServiceCollectionExtensions
         })
             .AddIdentityCookies();
 
+        services.AddScoped<CookieEvents>();
+        services.ConfigureApplicationCookie(opt =>
+        {
+            opt.EventsType = typeof(CookieEvents);
+        });
+
         return services;
     }
 }

@@ -1,12 +1,18 @@
 ﻿@using SmartSchool.Web.Components.Layout
 @using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims
+
 
 @page "/login"
 @layout AuthLayout
 @attribute [AllowAnonymous]
 
 @inject NavigationManager navigation
-
+@inject UserManager<IdentityUser> userManager
+@inject IUserStore<IdentityUser> userStore
+@inject RoleManager<IdentityRole> roleManager
+@inject SignInManager<IdentityUser> signInManager
 
 <EditForm method="post" Model="LoginForm" OnValidSubmit="PerformLogin" FormName="login"
           style="margin-top:-10px">
@@ -31,8 +37,34 @@
 
     public async Task PerformLogin()
     {
-        await Task.CompletedTask;
+        // await Register();
+
+        await signInManager.PasswordSignInAsync(LoginForm.Email, LoginForm.Password, true, false);
+
         navigation.NavigateTo("/");
+    }
+
+    private async Task Register()
+    {
+        var identity = new IdentityUser();
+        await userManager.SetUserNameAsync(identity, LoginForm.Email);
+
+        var emailStore = (IUserEmailStore<IdentityUser>)userStore;
+        await emailStore.SetEmailAsync(identity, LoginForm.Email, CancellationToken.None);
+
+        await userManager.CreateAsync(identity, LoginForm.Password);
+
+        List<Claim> claims =
+        [
+            new("firstName", "Dan"), new("lastName", "Patrascu")
+        ];
+
+        await userManager.AddClaimsAsync(identity, claims);
+
+        var superAdminRole = new IdentityRole("Superadmin");
+
+        await roleManager.CreateAsync(superAdminRole);
+        await userManager.AddToRoleAsync(identity, "Superadmin");
     }
 
     private class LoginModel

@@ -11,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bff", "Bff", "{57B4901D-FAE
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartSchool.Web", "SmartSchool.Web\SmartSchool.Web.csproj", "{1774656A-92F9-444F-A0EA-5219A77B4F02}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartSchool.AppHost", "SmartSchool.AppHost\SmartSchool.AppHost.csproj", "{CC0E186C-AFFC-4647-9FFB-028124F7E7F9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartSchool.AppHost", "SmartSchool.AppHost\SmartSchool.AppHost.csproj", "{CC0E186C-AFFC-4647-9FFB-028124F7E7F9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartSchool.ServiceDefaults", "SmartSchool.ServiceDefaults\SmartSchool.ServiceDefaults.csproj", "{DAD86FC9-F265-425F-BEA4-B5069830CEA4}"
 EndProject
