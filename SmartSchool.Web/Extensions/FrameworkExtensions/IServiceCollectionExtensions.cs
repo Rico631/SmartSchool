@@ -25,6 +25,8 @@ public static class IServiceCollectionExtensions
             opt.EventsType = typeof(CookieEvents);
         });
 
+        services.AddAuthorization();
+
         return services;
     }
 }
