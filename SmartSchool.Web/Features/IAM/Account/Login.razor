@@ -41,6 +41,7 @@
 @code {
     [SupplyParameterFromForm]
     private LoginModel LoginForm { get; set; } = new();
+    private const string roleName = "Superadmin";
 
     public async Task PerformLogin()
     {
@@ -69,10 +70,14 @@
 
         await userManager.AddClaimsAsync(identity, claims);
 
-        var superAdminRole = new IdentityRole("Superadmin");
+        var superAdminRole = roleManager.Roles.FirstOrDefault(x => x.Name == roleName);
+        if (superAdminRole is null)
+        {
+            superAdminRole = new IdentityRole(roleName);
+            await roleManager.CreateAsync(superAdminRole);
+        }
 
-        await roleManager.CreateAsync(superAdminRole);
-        await userManager.AddToRoleAsync(identity, "Superadmin");
+        await userManager.AddToRoleAsync(identity, roleName);
     }
 
     private class LoginModel

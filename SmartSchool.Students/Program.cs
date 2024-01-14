@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SmartSchool.Students.Data;
+using SmartSchool.Students.Domain.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,8 @@ builder.Services.AddMediatR(cfg =>
 
 var app = builder.Build();
 
+await ConfigureDbAsync(app);
+
 app.MapDefaultEndpoints();
 
 // Configure the HTTP request pipeline.
@@ -40,3 +43,24 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+static async Task ConfigureDbAsync(WebApplication app)
+{
+    var factory = app.Services.GetRequiredService<IDbContextFactory<AppDbContext>>();
+    using var context = await factory.CreateDbContextAsync();
+    await context.Database.EnsureCreatedAsync();
+
+    if (context.Students.Any())
+        return;
+
+    var student = new Student
+    {
+
+        RollNumber = "abcdefg1234553",
+        FirstName = "Dan",
+        LastName = "Patrascu",
+        DateOfBirth = new DateTime(2007, 1, 14)
+    };
+    context.Students.Add(student);
+    await context.SaveChangesAsync();
+}
