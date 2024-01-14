@@ -1,5 +1,6 @@
 using Refit;
 using SmartSchool.Bff.ApiClients;
+using SmartSchool.Bff.Students;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,5 +28,7 @@ if (app.Environment.IsDevelopment())
 
 
 app.UseHttpsRedirection();
+
+app.AddStudentEndpoints();
 
 app.Run();

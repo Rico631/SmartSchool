@@ -46,8 +46,8 @@ app.Run();
 
 static async Task ConfigureDbAsync(WebApplication app)
 {
-    var factory = app.Services.GetRequiredService<IDbContextFactory<AppDbContext>>();
-    using var context = await factory.CreateDbContextAsync();
+    using var scope = app.Services.CreateScope();
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     await context.Database.EnsureCreatedAsync();
 
     if (context.Students.Any())

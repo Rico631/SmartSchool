@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Refit;
 using SmartSchool.Web.Components;
 using SmartSchool.Web.Data;
 using SmartSchool.Web.Extensions.FrameworkExtensions;
+using SmartSchool.Web.Services.BffApiClient;
 using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +18,9 @@ builder.Services.AddRazorComponents()
 builder.ConfigureIdentity();
 
 builder.Services.ConfigureAuthentication();
+
+builder.Services.AddRefitClient<IBffApiClient>()
+    .ConfigureHttpClient(c => c.BaseAddress = new Uri("http://smartschool.bff"));
 
 var app = builder.Build();
 
@@ -44,8 +49,8 @@ app.Run();
 
 static async Task ConfigureDbAsync(WebApplication app)
 {
-    var factory = app.Services.GetRequiredService<IDbContextFactory<AppDbContext>>();
-    using var context = await factory.CreateDbContextAsync();
+    using var scope = app.Services.CreateScope();
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     await context.Database.EnsureCreatedAsync();
 
     if (context.Users.Any())

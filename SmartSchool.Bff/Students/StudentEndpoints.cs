@@ -8,7 +8,9 @@ public static class StudentEndpoints
     {
         var students = app.MapGroup("/students");
 
-        students.MapPost("/create", CreateStudent);
+        students.MapPost("/", CreateStudent)
+            .WithName("CreateStudent")
+            .Produces(200, typeof(StudentBasicInfo));
 
         return app;
     }
