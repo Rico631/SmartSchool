@@ -26,9 +26,16 @@
         <label for="password" class="form-label">Email:</label>
         <InputText type="password" @bind-Value="LoginForm.Password" class="form-control" />
     </div>
+    <div class="form-check mt-1">
+        <InputCheckbox class="form-check-input" id="flexCheckDefault" @bind-Value="LoginForm.Register"></InputCheckbox>
+        <label class="form-check-label" for="flexCheckDefault">
+            Register?
+        </label>
+    </div>
     <div class="text-center pt-1 mb-5 pb-1">
         <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit">Login</button>
     </div>
+
 </EditForm>
 
 @code {
@@ -37,7 +44,8 @@
 
     public async Task PerformLogin()
     {
-        // await Register();
+        if (LoginForm.Register)
+            await Register();
 
         await signInManager.PasswordSignInAsync(LoginForm.Email, LoginForm.Password, true, false);
 
@@ -78,5 +86,7 @@
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; } = string.Empty;
+
+        public bool Register { get; set; } = false;
     }
 }

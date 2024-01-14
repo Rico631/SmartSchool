@@ -1,4 +1,6 @@
+using Microsoft.EntityFrameworkCore;
 using SmartSchool.Web.Components;
+using SmartSchool.Web.Data;
 using SmartSchool.Web.Extensions.FrameworkExtensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +16,10 @@ builder.ConfigureIdentity();
 builder.Services.ConfigureAuthentication();
 
 var app = builder.Build();
+
+var factory = app.Services.GetRequiredService<IDbContextFactory<AppDbContext>>();
+using var context = await factory.CreateDbContextAsync();
+await context.Database.EnsureCreatedAsync();
 
 app.MapDefaultEndpoints();
 
