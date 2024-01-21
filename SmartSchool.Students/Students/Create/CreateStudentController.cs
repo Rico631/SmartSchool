@@ -19,4 +19,5 @@ public record NewStudent(
     string RollNumber,
     string FirstName,
     string LastName,
+    string Email,
     DateTime DateOfBirth);

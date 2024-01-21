@@ -61,15 +61,16 @@ static async Task ConfigureDbAsync(WebApplication app)
 
 static async Task CreateUserAndRoleAsync(WebApplication app)
 {
-    var userManager = app.Services.GetRequiredService<UserManager<IdentityUser>>();
-    var userStore = app.Services.GetRequiredService<IUserStore<IdentityUser>>();
-    var roleManager = app.Services.GetRequiredService<RoleManager<IdentityRole>>();
+    using var scope = app.Services.CreateScope();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+    var userStore = scope.ServiceProvider.GetRequiredService<IUserStore<IdentityUser>>();
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
     var identity = new IdentityUser();
 
     var email = "user@domain.com";
     var password = "12345";
-    var roleName = "Superadmin";
+    string[] roleNames = ["Superadmin", "Student"];
     List<Claim> claims = [new("firstName", "Dan"), new("lastName", "Patrascu")];
 
     await userManager.SetUserNameAsync(identity, email);
@@ -79,8 +80,10 @@ static async Task CreateUserAndRoleAsync(WebApplication app)
 
     await userManager.AddClaimsAsync(identity, claims);
 
-    var superAdminRole = new IdentityRole(roleName);
-
-    await roleManager.CreateAsync(superAdminRole);
-    await userManager.AddToRoleAsync(identity, roleName);
+    foreach (var roleName in roleNames)
+    {
+        var role = new IdentityRole(roleName);
+        await roleManager.CreateAsync(role);
+    }
+    await userManager.AddToRoleAsync(identity, roleNames[0]);
 }

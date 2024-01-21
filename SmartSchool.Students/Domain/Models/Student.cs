@@ -13,7 +13,7 @@ public class Student
     public Address? Address { get; set; }
     public ICollection<Relative> Relatives { get; set; } = [];
 
-    public static Student Create(string roleNumber, string firstName, string lastName,
+    public static Student Create(string roleNumber, string firstName, string lastName, string email,
         DateTime dateOfBirth)
     {
         return new Student
@@ -21,6 +21,7 @@ public class Student
             RollNumber = roleNumber,
             FirstName = firstName,
             LastName = lastName,
+            Email = email,
             DateOfBirth = dateOfBirth
         };
     }

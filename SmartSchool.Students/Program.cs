@@ -59,6 +59,7 @@ static async Task ConfigureDbAsync(WebApplication app)
         RollNumber = "abcdefg1234553",
         FirstName = "Dan",
         LastName = "Patrascu",
+        Email = "dan@domain.com",
         DateOfBirth = new DateTime(2007, 1, 14)
     };
     context.Students.Add(student);

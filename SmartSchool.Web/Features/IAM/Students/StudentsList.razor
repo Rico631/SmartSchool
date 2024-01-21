@@ -1,9 +1,75 @@
 ﻿@using SmartSchool.Web.Features.IAM.Students.CreateStudent
-
+@using SmartSchool.Web.Services.BffApiClient
 @page "/iam/students"
+@attribute [StreamRendering(true)]
+@inject IBffApiClient bffApiClient
 
-<CreateStudentButton />
+@if (IsLoading)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div class="row mb-5 mt-5">
+        <div class="col-6">
+            <CreateStudentButton />
+            <CreateStudentModal OnStudentCreated="AddStudentToList" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Roll Number</th>
+                        <th> First Name</th>
+                        <th>Last Name</th>
+                        <th>Age</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var student in Students)
+                    {
+                        <tr>
+                            <td>@student.RollNumber</td>
+                            <td>@student.FirstName</td>
+                            <td>@student.LastName</td>
+                            <td>@student.Age</td>
+                            <td>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <button class="btn btn-warning">Manage</button>
+                                    </div>
+                                    <div class="col-6">
+                                        <button class="btn btn-danger">Delete</button>
+                                    </div>
+                                </div>
+
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
 
 @code {
+    private bool IsLoading { get; set; } = true;
+    private List<StudentBasicInfo> Students { get; set; } = [];
 
+    protected override async Task OnInitializedAsync()
+    {
+        var students = await bffApiClient.GetStudents(new PagingOptions());
+        Students.AddRange(students);
+
+        IsLoading = false;
+
+    }
+
+    private void AddStudentToList(StudentBasicInfo student)
+    {
+        Students.Add(student);
+    }
 }

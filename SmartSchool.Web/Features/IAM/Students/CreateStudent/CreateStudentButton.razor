@@ -1,30 +1,15 @@
 ﻿@using SmartSchool.Web.Services.BffApiClient
-@inject IBffApiClient bffApiClient
 @rendermode InteractiveServer
 
 <div class="row">
     <div class=" col col-6">
-        <button class="btn btn-primary" @onclick="CreateStudent">Create Student</button>
-    </div>
-    <div class="row">
-        <div class="col col-12">
-            <p>@((MarkupString)NewStudent)</p>
-        </div>
+        <button class="btn btn-success" type="button"
+                data-bs-toggle="modal" data-bs-target="#createStudentModal">
+            Create Student
+        </button>
     </div>
 </div>
 
 @code {
-    private string NewStudent = string.Empty;
 
-    private async Task CreateStudent()
-    {
-        NewStudent newStudent = new(Guid.NewGuid().ToString(), "John", "Doe", DateTime.Now.AddYears(-20));
-        var result = await bffApiClient.CreateStudentAsync(newStudent);
-
-        NewStudent = $"RollNumber: {result.RollNumber}"
-        + $"<br>Student ID: {result.StudentId}"
-        + $"<br>First Name: {result.FirstName}"
-        + $"<br>Last Name:{result.LastName}"
-        + $"<br>Date of Birth: {result.DateOfBirth}";
-    }
 }

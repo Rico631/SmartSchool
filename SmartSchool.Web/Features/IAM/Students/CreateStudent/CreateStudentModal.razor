@@ -1,0 +1,131 @@
+﻿@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims
+@using SmartSchool.Web.Services.BffApiClient
+
+@inject NavigationManager navigation
+@inject UserManager<IdentityUser> userManager
+@inject IUserStore<IdentityUser> userStore
+@inject RoleManager<IdentityRole> roleManager
+@inject IBffApiClient bffApiClient
+
+<div class="modal fade" id="createStudentModal" tabindex="-1">
+    <div class="modal-dialog modal-lg d-flex align-content-center justify-content-center">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>Add new student</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <EditForm Model="Input" OnValidSubmit="SubmitForm" FormName="createStudent">
+                    <div class="row">
+                        @* <AntiforgeryToken /> *@
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
+                    </div>
+                    <div class="row">
+                        <div class="mb-3">
+                            <label for="firstName" class="form-label">First Name:</label>
+                            <InputText id="firstName" class="form-control" placeholder="John"
+                                       @bind-Value="Input.FirstName" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="lastName" class="form-label">Last Name:</label>
+                            <InputText id="lastName" class="form-control" placeholder="Doe"
+                                       @bind-Value="Input.LastName" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email:</label>
+                                <InputText id="email" class="form-control" placeholder="email@example.com"
+                                           @bind-Value="Input.Email" />
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password:</label>
+                                <InputText id="password" class="form-control" type="password"
+                                           @bind-Value="Input.Password" />
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label for="dob" class="form-label">Date of birth:</label>
+                                <InputDate id="dob" class="form-control" 
+                                           @bind-Value="Input.DateOfBirth" />
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-success">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [SupplyParameterFromForm]
+    private StudentCreateViewModel Input { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<StudentBasicInfo> OnStudentCreated { get; set; }
+
+    private async Task SubmitForm()
+    {
+        var identity = await CreateIdentityAsync(Input);
+
+        NewStudent newStudent = new(identity.Id, Input.FirstName!, Input.LastName!, Input.Email!, Input.DateOfBirth!.Value);
+        var createdStudent = await bffApiClient.CreateStudentAsync(newStudent);
+
+        Input = new();
+        await OnStudentCreated.InvokeAsync(createdStudent);
+    }
+
+    private async Task<IdentityUser> CreateIdentityAsync(StudentCreateViewModel student)
+    {
+        var identity = new IdentityUser();
+        await userManager.SetUserNameAsync(identity, student.Email);
+        var emailStore = (IUserEmailStore<IdentityUser>)userStore;
+        await emailStore.SetEmailAsync(identity, student.Email, CancellationToken.None);
+        await userManager.CreateAsync(identity, student.Password!);
+
+        List<Claim> claims =
+        [new("firstName", student.FirstName!), new("lastName", student.LastName!)];
+        await userManager.AddClaimsAsync(identity, claims);
+
+        var role = await roleManager.FindByNameAsync("Student");
+        await userManager.AddToRoleAsync(identity, role!.Name!);
+
+        return identity;
+    }
+
+    private class StudentCreateViewModel
+    {
+        [Required]
+        public string? FirstName { get; set; }
+
+        [Required]
+        public string? LastName { get; set; }
+
+        [Required]
+        [EmailAddress]
+        public string? Email { get; set; }
+
+        [Required]
+        public string? Password { get; set; }
+
+        [Required]
+        public DateTime? DateOfBirth { get; set; }
+    }
+}

@@ -7,3 +7,4 @@ The code was rewritten from the streams of the [Codewrinkles - YouTube](https://
 - [School Mgmt App | Microservices With .NET Aspire & Blazor SSR | Part 2 - YouTube](https://youtu.be/LWZaEjUPcVA)
 - [School Mgmt App | Microservices With .NET Aspire & Blazor SSR | Part 3 - YouTube](https://youtu.be/mwOj15ZtgJI)
 - [School Mgmt App | Microservices With .NET Aspire & Blazor SSR | Part 4 - YouTube](https://youtu.be/S7mP4upcLmg)
+- [School Mgmt App | Microservices With .NET Aspire & Blazor SSR | Part 5 - YouTube](https://youtu.be/PuXXengQQKU)

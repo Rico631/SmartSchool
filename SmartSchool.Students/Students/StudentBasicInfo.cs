@@ -7,6 +7,7 @@ public record StudentBasicInfo(
     string RollNumber,
     string FirstName,
     string LastName,
+    string? Email,
     DateTime DateOfBirth,
     int Age)
 {
@@ -16,6 +17,7 @@ public record StudentBasicInfo(
             student.RollNumber,
             student.FirstName,
             student.LastName,
+            student.Email,
             student.DateOfBirth,
             student.Age);
 }

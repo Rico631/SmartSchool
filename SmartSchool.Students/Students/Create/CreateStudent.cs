@@ -14,6 +14,7 @@ public class CreateStudentHandler(AppDbContext context) : IRequestHandler<Create
             request.NewStudent.RollNumber,
             request.NewStudent.FirstName,
             request.NewStudent.LastName,
+            request.NewStudent.Email,
             request.NewStudent.DateOfBirth);
 
         context.Students.Add(student);
