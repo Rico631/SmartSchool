@@ -8,5 +8,11 @@ public interface IBffApiClient
     Task<StudentBasicInfo> CreateStudentAsync([Body] NewStudent newStudent);
     
     [Get("/students")]
-    Task<StudentBasicInfo[]> GetStudents([Query] PagingOptions paging);
+    Task<StudentBasicInfo[]> GetStudentsAsync([Query] PagingOptions paging);
+
+    [Get("/students/{id}")]
+    Task<StudentDetails> GetStudentDetailsAsync(int id);
+
+    [Delete("/students/{studentId}")]
+    Task DeleteStudentAsync(int studentId);
 }

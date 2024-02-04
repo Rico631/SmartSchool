@@ -1,0 +1,55 @@
+﻿
+<div class="row" style="margin-top:1rem">
+    <div class="col-12">
+        <div class="row">
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Personal information</h4>
+                        <p>Name: @Student?.FirstName @Student?.LastName</p>
+                        <p>Email: @Student?.Email</p>
+                    </div>
+                    <div class="card-footer" style="background-color:white">
+                        <button class="btn btn-success btn-rounded" type="button" data-bs-toggle="modal"
+                                data-bs-target="#editPersonalDetails">
+                            Update
+                        </button>
+                    </div>
+                </div>
+                <div class="card" style="margin-top:10px">
+                    <div class="card-body">
+                        <h4 class="card-title">Relatives</h4>
+                    </div>
+                    <div class="card-footer" style="background-color:white">
+                        <button class="btn btn-success btn-rounded" type="button" data-bs-toggle="modal"
+                                data-bs-target="#editRelatives">
+                            Update
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Address</h4>
+                        <p>Street: @Student?.AddressDetails?.Street</p>
+                        <p>ZIP code: @Student?.AddressDetails?.PostalCode</p>
+                        <p>City: @Student?.AddressDetails?.City</p>
+                    </div>
+                    <div class="card-footer" style="background-color:white">
+                        <button class="btn btn-success btn-rounded" type="button" data-bs-toggle="modal"
+                                data-bs-target="#updateAddress">
+                            Update
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public SmartSchool.Web.Services.BffApiClient.StudentDetails? Student { get; set; }
+}

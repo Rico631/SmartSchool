@@ -39,10 +39,11 @@ else
                             <td>
                                 <div class="row">
                                     <div class="col-6">
-                                        <button class="btn btn-warning">Manage</button>
+                                        <ManageStudentButton StudentId="@student.StudentId" />
                                     </div>
                                     <div class="col-6">
-                                        <button class="btn btn-danger">Delete</button>
+                                        <DeleteStudentButton StudentId="@student.StudentId"
+                                                             OnStudentDeleted="RemoveStudentFromList" />
                                     </div>
                                 </div>
 
@@ -61,7 +62,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        var students = await bffApiClient.GetStudents(new PagingOptions());
+        var students = await bffApiClient.GetStudentsAsync(new PagingOptions());
         Students.AddRange(students);
 
         IsLoading = false;
@@ -71,5 +72,14 @@ else
     private void AddStudentToList(StudentBasicInfo student)
     {
         Students.Add(student);
+    }
+
+    private async void RemoveStudentFromList(int studentId)
+    {
+        var student = Students.Single(x => x.StudentId == studentId);
+        Students.Remove(student);
+
+        await InvokeAsync(StateHasChanged);
+
     }
 }

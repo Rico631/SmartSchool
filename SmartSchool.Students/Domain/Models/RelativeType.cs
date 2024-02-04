@@ -4,11 +4,6 @@ public enum RelativeType
 {
     Mother,
     Father,
-    Aunt,
-    Uncle,
-    Grandmother,
-    Grandfather,
-    Tutor,
     Brother,
     Sister
 }

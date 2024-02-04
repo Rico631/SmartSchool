@@ -1,0 +1,15 @@
+﻿@rendermode @(new InteractiveServerRenderMode(prerender: false))
+@inject NavigationManager manager
+
+<button class="btn btn-warning" @onclick="OpenStudentDetails">Manage</button>
+
+@code {
+
+    [Parameter]
+    public int StudentId { get; set; }
+
+    private void OpenStudentDetails()
+    {
+        manager.NavigateTo($"/iam/students/{StudentId}");
+    }
+}

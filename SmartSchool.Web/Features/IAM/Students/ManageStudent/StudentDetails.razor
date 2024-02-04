@@ -1,0 +1,36 @@
+﻿@page "/iam/students/{studentId:int}"
+@inject IBffApiClient client
+
+@attribute [StreamRendering(true)]
+
+<AuthorizeView>
+    <Authorized>
+        @if (Student is null)
+        {
+            <p>Loading...</p>
+        }
+        else
+        {
+            <div>
+                <StudentDetailsHeader Student="@Student" />
+                <StudentDetailsBody Student="@Student" />
+            </div>
+        }
+    </Authorized>
+    <NotAuthorized>
+        <h1>Access Denied</h1>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+
+    [Parameter]
+    public int StudentId { get; set; }
+
+    public SmartSchool.Web.Services.BffApiClient.StudentDetails? Student { get; set; } = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Student = await client.GetStudentDetailsAsync(StudentId);
+    }
+}
